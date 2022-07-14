@@ -12,9 +12,9 @@ PKG_RELEASE:=$(AUTORELEASE)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=$(PROJECT_GIT)/project/procd.git
-PKG_MIRROR_HASH:=af4ca76197b89943c85e4e2d27a1036f43337d475971d0041cb525bcbca075c1
-PKG_SOURCE_DATE:=2022-02-19
-PKG_SOURCE_VERSION:=ad652490d47916a27c01e3dd8f9eafcecbb4bc7f
+PKG_MIRROR_HASH:=0d9b82919492e1ec0df4011b932a210b6256774d0cb1f1e3de24b6dbf36c6a77
+PKG_SOURCE_DATE:=2022-06-01
+PKG_SOURCE_VERSION:=7a0096853594874d4c60266ec338ac23728017df
 CMAKE_INSTALL:=1
 
 PKG_LICENSE:=GPL-2.0
@@ -121,6 +121,7 @@ define Package/procd/install
 	$(INSTALL_BIN) ./files/reload_config $(1)/sbin/
 	$(INSTALL_CONF) ./files/hotplug*.json $(1)/etc/
 	$(INSTALL_DATA) ./files/procd.sh $(1)/lib/functions/
+	$(INSTALL_BIN) ./files/service $(1)/sbin/service
 endef
 
 Package/procd-selinux/install = $(Package/procd/install)

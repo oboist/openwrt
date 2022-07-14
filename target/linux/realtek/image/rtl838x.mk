@@ -15,6 +15,16 @@ define Device/d-link_dgs-1210
   SOC := rtl8382
   IMAGE_SIZE := 13824k
   DEVICE_VENDOR := D-Link
+  DLINK_KERNEL_PART_SIZE := 1572864
+  KERNEL := kernel-bin | append-dtb | gzip | uImage gzip | dlink-cameo
+  CAMEO_KERNEL_PART := 2
+  CAMEO_ROOTFS_PART := 3
+  CAMEO_CUSTOMER_SIGNATURE := 2
+  CAMEO_BOARD_VERSION := 32
+  IMAGES += factory_image1.bin
+  IMAGE/factory_image1.bin := append-kernel | pad-to 64k | \
+	append-rootfs | pad-rootfs | pad-to 16 | check-size | \
+	dlink-version | dlink-headers
 endef
 
 define Device/d-link_dgs-1210-10p
@@ -30,11 +40,30 @@ define Device/d-link_dgs-1210-16
 endef
 TARGET_DEVICES += d-link_dgs-1210-16
 
+define Device/d-link_dgs-1210-20
+  $(Device/d-link_dgs-1210)
+  DEVICE_MODEL := DGS-1210-20
+endef
+TARGET_DEVICES += d-link_dgs-1210-20
+
 define Device/d-link_dgs-1210-28
   $(Device/d-link_dgs-1210)
   DEVICE_MODEL := DGS-1210-28
 endef
 TARGET_DEVICES += d-link_dgs-1210-28
+
+# The "IMG-" uImage name allows flashing the iniramfs from the vendor Web UI.
+# Avoided for sysupgrade, as the vendor FW would do an incomplete flash.
+define Device/engenius_ews2910p
+  SOC := rtl8380
+  IMAGE_SIZE := 8192k
+  DEVICE_VENDOR := EnGenius
+  DEVICE_MODEL := EWP2910P
+  UIMAGE_MAGIC := 0x03802910
+  KERNEL_INITRAMFS := kernel-bin | append-dtb | gzip | \
+	uImage gzip -n 'IMG-0.00.00-c0.0.00'
+endef
+TARGET_DEVICES += engenius_ews2910p
 
 define Device/inaba_aml2-17gp
   SOC := rtl8382
@@ -44,6 +73,15 @@ define Device/inaba_aml2-17gp
   UIMAGE_MAGIC := 0x83800000
 endef
 TARGET_DEVICES += inaba_aml2-17gp
+
+define Device/iodata_bsh-g24mb
+  SOC := rtl8382
+  IMAGE_SIZE := 13696k
+  DEVICE_VENDOR := I-O DATA
+  DEVICE_MODEL := BSH-G24MB
+  UIMAGE_MAGIC := 0x83800013
+endef
+TARGET_DEVICES += iodata_bsh-g24mb
 
 define Device/netgear_gs108t-v3
   $(Device/netgear_nge)
@@ -76,6 +114,16 @@ define Device/netgear_gs310tp-v1
 endef
 TARGET_DEVICES += netgear_gs310tp-v1
 
+define Device/panasonic_m8eg-pn28080k
+  SOC := rtl8380
+  IMAGE_SIZE := 16384k
+  DEVICE_VENDOR := Panasonic
+  DEVICE_MODEL := Switch-M8eG
+  DEVICE_VARIANT := PN28080K
+  DEVICE_PACKAGES := kmod-i2c-mux-pca954x
+endef
+TARGET_DEVICES += panasonic_m8eg-pn28080k
+
 define Device/zyxel_gs1900
   SOC := rtl8380
   IMAGE_SIZE := 6976k
@@ -91,6 +139,14 @@ define Device/zyxel_gs1900-10hp
   ZYXEL_VERS := AAZI
 endef
 TARGET_DEVICES += zyxel_gs1900-10hp
+
+define Device/zyxel_gs1900-16
+  $(Device/zyxel_gs1900)
+  SOC := rtl8382
+  DEVICE_MODEL := GS1900-16
+  ZYXEL_VERS := AAHJ
+endef
+TARGET_DEVICES += zyxel_gs1900-16
 
 define Device/zyxel_gs1900-8
   $(Device/zyxel_gs1900)
@@ -116,6 +172,32 @@ define Device/zyxel_gs1900-8hp-v2
   DEVICE_PACKAGES += lua-rs232
 endef
 TARGET_DEVICES += zyxel_gs1900-8hp-v2
+
+define Device/zyxel_gs1900-24-v1
+  $(Device/zyxel_gs1900)
+  SOC := rtl8382
+  DEVICE_MODEL := GS1900-24
+  DEVICE_VARIANT := v1
+  ZYXEL_VERS := AAHL
+endef
+TARGET_DEVICES += zyxel_gs1900-24-v1
+
+define Device/zyxel_gs1900-24e
+  $(Device/zyxel_gs1900)
+  SOC := rtl8382
+  DEVICE_MODEL := GS1900-24E
+  ZYXEL_VERS := AAHK
+endef
+TARGET_DEVICES += zyxel_gs1900-24e
+
+define Device/zyxel_gs1900-24hp-v1
+  $(Device/zyxel_gs1900)
+  SOC := rtl8382
+  DEVICE_MODEL := GS1900-24HP
+  DEVICE_VARIANT := v1
+  ZYXEL_VERS := AAHM
+endef
+TARGET_DEVICES += zyxel_gs1900-24hp-v1
 
 define Device/zyxel_gs1900-24hp-v2
   $(Device/zyxel_gs1900)

@@ -53,6 +53,9 @@ platform_do_upgrade() {
 	ampedwireless,ally-r1900k|\
 	asus,rt-ac65p|\
 	asus,rt-ac85p|\
+	asus,rt-ax53u|\
+	beeline,smartbox-flash|\
+	beeline,smartbox-giga|\
 	dlink,dir-1960-a1|\
 	dlink,dir-2640-a1|\
 	dlink,dir-2660-a1|\
@@ -69,6 +72,7 @@ platform_do_upgrade() {
 	linksys,ea7500-v2|\
 	linksys,ea8100-v1|\
 	linksys,ea8100-v2|\
+	mts,wg430223|\
 	netgear,r6220|\
 	netgear,r6260|\
 	netgear,r6350|\
@@ -83,6 +87,7 @@ platform_do_upgrade() {
 	netis,wf2881|\
 	raisecom,msg1500-x-00|\
 	sercomm,na502|\
+	sercomm,na502s|\
 	xiaomi,mi-router-3g|\
 	xiaomi,mi-router-3-pro|\
 	xiaomi,mi-router-4|\
@@ -111,6 +116,7 @@ platform_do_upgrade() {
 	zyxel,nr7101)
 		fw_setenv CheckBypass 0
 		fw_setenv Image1Stable 0
+		[ "$(fw_printenv -n BootingFlag)" = "0" ] || fw_setenv BootingFlag 0
 		CI_KERNPART="Kernel"
 		nand_do_upgrade "$1"
 		;;

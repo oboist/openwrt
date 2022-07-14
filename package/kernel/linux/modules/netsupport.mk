@@ -1111,7 +1111,8 @@ define KernelPackage/sctp
      CONFIG_SCTP_DEFAULT_COOKIE_HMAC_MD5=y
   FILES:= $(LINUX_DIR)/net/sctp/sctp.ko
   AUTOLOAD:= $(call AutoLoad,32,sctp)
-  DEPENDS:=+kmod-lib-crc32c +kmod-crypto-md5 +kmod-crypto-hmac
+  DEPENDS:=+kmod-lib-crc32c +kmod-crypto-md5 +kmod-crypto-hmac \
+    +LINUX_5_15:kmod-udptunnel4 +LINUX_5_15:kmod-udptunnel6
 endef
 
 define KernelPackage/sctp/description
@@ -1295,11 +1296,35 @@ endef
 $(eval $(call KernelPackage,netlink-diag))
 
 
+define KernelPackage/inet-diag
+  SUBMENU:=$(NETWORK_SUPPORT_MENU)
+  TITLE:=INET diag support for ss utility
+  KCONFIG:= \
+	CONFIG_INET_DIAG \
+	CONFIG_INET_TCP_DIAG \
+	CONFIG_INET_UDP_DIAG \
+	CONFIG_INET_RAW_DIAG \
+	CONFIG_INET_DIAG_DESTROY=n
+  FILES:= \
+	$(LINUX_DIR)/net/ipv4/inet_diag.ko \
+	$(LINUX_DIR)/net/ipv4/tcp_diag.ko \
+	$(LINUX_DIR)/net/ipv4/udp_diag.ko \
+	$(LINUX_DIR)/net/ipv4/raw_diag.ko
+  AUTOLOAD:=$(call AutoLoad,31,inet_diag tcp_diag udp_diag raw_diag)
+endef
+
+define KernelPackage/inet-diag/description
+Support for INET (TCP, DCCP, etc) socket monitoring interface used by
+native Linux tools such as ss.
+endef
+
+$(eval $(call KernelPackage,inet-diag))
+
+
 define KernelPackage/wireguard
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=WireGuard secure network tunnel
   DEPENDS:= \
-	  +kmod-crypto-lib-blake2s \
 	  +kmod-crypto-lib-chacha20poly1305 \
 	  +kmod-crypto-lib-curve25519 \
 	  +kmod-udptunnel4 \
